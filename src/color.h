@@ -30,3 +30,8 @@ inline std::ostream& operator<<(std::ostream& out, const Color& c)
     out << "(" << int(255.999 * c.r) << ", " << int(255.999 * c.g) << ", " << int(255.999 * c.b) << ")" << std::endl;
     return out;
 };
+
+inline Color operator*(float c, const Color& color)
+{
+    return Color(c * color.r, c * color.g, c * color.b);
+}
