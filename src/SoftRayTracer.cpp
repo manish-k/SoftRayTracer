@@ -5,7 +5,6 @@
 int main()
 {
     Image img;
-    Color red(1.f, 0.f, 0.f);
 
     int   width  = 256;
     int   height = 256;
@@ -21,7 +20,7 @@ int main()
                 float g = float(j) / (height - 1);
                 float b = 0.0f;
 
-                set_image_pixel(&img, i, j, r, g, b);
+                set_image_pixel_color(&img, i, j, r, g, b);
             }
         }
 

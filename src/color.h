@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 struct Color
 {
     float r;
@@ -23,8 +25,8 @@ struct Color
     friend std::ostream& operator<<(std::ostream& out, const Color& c);
 };
 
-std::ostream& operator<<(std::ostream& out, const Color& c)
+inline std::ostream& operator<<(std::ostream& out, const Color& c)
 {
-    out << "(" << 255.999 * c.r << ", " << 255.999 * c.g << ", " << 255.999 * c.b << ")" << std::endl;
+    out << "(" << int(255.999 * c.r) << ", " << int(255.999 * c.g) << ", " << int(255.999 * c.b) << ")" << std::endl;
     return out;
 };

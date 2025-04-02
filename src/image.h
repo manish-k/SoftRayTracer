@@ -1,5 +1,7 @@
 #pragma once
 
+#include "color.h"
+
 enum allocation_type
 {
     NONE_ALLOC,
@@ -19,7 +21,8 @@ struct Image
 
 bool read_image(Image* img, const char* file_path);
 bool create_image(Image* img, int width, int height, int channels);
-void set_image_pixel(Image* img, int x_pos, int y_pos, float r, float g, float b);
-// TODO:: add get pixel after introducing color/vector struct
-void write_image(Image* img, const char* file_path);
+void  set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, float b);
+void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color);
+Color get_image_pixel_color(Image* img, int x_pos, int y_pos);
+void  write_image(Image* img, const char* file_path);
 void free_image(Image* img);

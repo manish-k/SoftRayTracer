@@ -44,7 +44,7 @@ bool create_image(Image* img, int width, int height, int channels)
     return false;
 }
 
-void set_image_pixel(Image* img, int x_pos, int y_pos, float r, float g, float b)
+void set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, float b)
 {
     // assert image should have atleas 3 channels
 
@@ -55,9 +55,26 @@ void set_image_pixel(Image* img, int x_pos, int y_pos, float r, float g, float b
     *(pixel + 2) = int(255.999 * b); // green
 }
 
+void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color)
+{
+    // assert image should have atleas 3 channels
+
+    unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
+
+    *pixel       = int(255.999 * color.r); // red
+    *(pixel + 1) = int(255.999 * color.g); // green
+    *(pixel + 2) = int(255.999 * color.b); // green
+}
+
+Color get_image_pixel_color(Image* img, int x_pos, int y_pos)
+{
+    unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
+    return Color(float(*(pixel)) / 255, float(*(pixel + 1)) / 255, float(*(pixel + 2)) / 255);
+}
+
 void write_image(Image* img, const char* file_path)
 {
-    //stbi_flip_vertically_on_write(true);
+    // stbi_flip_vertically_on_write(true);
 
     stbi_write_tga(file_path, img->width, img->height, img->channels, img->data);
 }
