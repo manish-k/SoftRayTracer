@@ -45,11 +45,17 @@ typedef Vec3<int>   Vec3i;
 typedef Vec3<float> Vec3f;
 
 template <typename T>
-std::ostream& operator<<(std::ostream& out, const Vec3<T>& v)
+inline std::ostream& operator<<(std::ostream& out, const Vec3<T>& v)
 {
     out << "(" << v.x << ", " << v.y << ", " << v.z << ")" << std::endl;
     return out;
 };
+
+template <typename T>
+inline Vec3<T> operator*(float c, const Vec3<T>& v)
+{
+    return Vec3<T>(c * x, c * y, c * z);
+}
 
 template <typename T>
 struct Vec2
@@ -87,11 +93,17 @@ typedef Vec2<int>   Vec2i;
 typedef Vec2<float> Vec2f;
 
 template <typename T>
-std::ostream& operator<<(std::ostream& out, const Vec2<T>& v)
+inline std::ostream& operator<<(std::ostream& out, const Vec2<T>& v)
 {
     out << "(" << v.x << ", " << v.y << ")" << std::endl;
     return out;
 };
+
+template <typename T>
+inline Vec2<T> operator*(float c, const Vec2<T>& v)
+{
+    return Vec2<T>(c * x, c * y);
+}
 
 template <typename T>
 struct Vec4
@@ -135,3 +147,9 @@ std::ostream& operator<<(std::ostream& out, const Vec4<T>& v)
     out << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")" << std::endl;
     return out;
 };
+
+template <typename T>
+inline Vec4<T> operator*(float c, const Vec4<T>& v)
+{
+    return Vec4<T>(c * x, c * y, c * z, c * w);
+}

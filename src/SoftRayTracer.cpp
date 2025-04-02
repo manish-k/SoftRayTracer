@@ -1,6 +1,4 @@
 ﻿#include "SoftRayTracer.h"
-#include "math/vector.h"
-#include "color.h"
 
 int main()
 {
