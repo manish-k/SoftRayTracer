@@ -12,6 +12,14 @@ set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(MATH_FILES 
 	"${SRC_DIR}/math/vector.h"
 )
+
+set(SRC_FILES 
+	# Header files
+	"${SRC_DIR}/image.h"
+	# Source files
+	"${SRC_DIR}/image.cpp"
+)
+
 set(MAIN_FILES
 	"SoftRayTracer.cpp" 
 	"SoftRayTracer.h"
@@ -19,6 +27,7 @@ set(MAIN_FILES
 
 set(PROJECT_FILES
 	${MATH_FILES}
+	${SRC_FILES}
 	${MAIN_FILES}
 )
 
