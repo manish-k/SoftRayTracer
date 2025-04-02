@@ -16,13 +16,14 @@ set(MATH_FILES
 set(SRC_FILES 
 	# Header files
 	"${SRC_DIR}/image.h"
+	"${SRC_DIR}/color.h"
 	# Source files
 	"${SRC_DIR}/image.cpp"
 )
 
 set(MAIN_FILES
-	"SoftRayTracer.cpp" 
-	"SoftRayTracer.h"
+	"${SRC_DIR}/SoftRayTracer.cpp" 
+	"${SRC_DIR}/SoftRayTracer.h"
 )
 
 set(PROJECT_FILES

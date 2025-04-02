@@ -1,8 +1,11 @@
 ﻿#include "SoftRayTracer.h"
+#include "math/vector.h"
+#include "color.h"
 
 int main()
 {
     Image img;
+    Color red(1.f, 0.f, 0.f);
 
     int   width  = 256;
     int   height = 256;
