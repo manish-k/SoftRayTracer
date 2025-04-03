@@ -24,6 +24,7 @@ set(UTILS_DIR "${SRC_DIR}/utils")
 set(UTILS_FILES
 	# Header files
 	"${UTILS_DIR}/log.h"
+	"${UTILS_DIR}/assert.h"
 	# Source files
 )
 
