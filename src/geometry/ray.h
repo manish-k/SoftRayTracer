@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include "utils/assert.h"
 
 struct Ray
 {
@@ -12,7 +13,7 @@ struct Ray
 
     Vec3f at(float t) const
     {
-        // TODO: t should be non negative
+        ASSERT(t >= 0, "t should not be negative");
         return origin + t * direction;
     }
 };

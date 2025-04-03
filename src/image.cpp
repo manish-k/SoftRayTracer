@@ -1,10 +1,10 @@
 #include "image.h"
+#include "utils/assert.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
-
 #include <iostream>
 
 bool read_image(Image* img, const char* file_path)
@@ -46,7 +46,7 @@ bool create_image(Image* img, int width, int height, int channels)
 
 void set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, float b)
 {
-    // assert image should have atleas 3 channels
+    ASSERT(img->channels >= 3, "need atleas 3 channels for r,g and b");
 
     unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
 
@@ -57,7 +57,7 @@ void set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, f
 
 void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color)
 {
-    // assert image should have atleas 3 channels
+    ASSERT(img->channels >= 3, "need atleas 3 channels for r,g and b");
 
     unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
 
@@ -74,8 +74,6 @@ Color get_image_pixel_color(Image* img, int x_pos, int y_pos)
 
 void write_image(Image* img, const char* file_path)
 {
-    // stbi_flip_vertically_on_write(true);
-
     stbi_write_tga(file_path, img->width, img->height, img->channels, img->data);
 }
 
