@@ -15,8 +15,16 @@ set(MATH_FILES
 
 set(GEOMETRY_DIR "${SRC_DIR}/geometry")
 set(GEOMETRY_FILES 
+	# Header files
 	"${GEOMETRY_DIR}/vector.h"
 	"${GEOMETRY_DIR}/ray.h"
+)
+
+set(UTILS_DIR "${SRC_DIR}/utils")
+set(UTILS_FILES
+	# Header files
+	"${UTILS_DIR}/log.h"
+	# Source files
 )
 
 set(SRC_FILES 
@@ -56,6 +64,7 @@ add_subdirectory(vendor)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
 	stb
+	spdlog
 )
 
 if(CLANG_FORMAT_EXE)

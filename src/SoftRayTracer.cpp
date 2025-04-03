@@ -1,7 +1,11 @@
 ﻿#include "SoftRayTracer.h"
 
+#include "utils/log.h"
+
 int main()
 {
+    init_logger();
+
     Image img;
 
     int   width  = 256;
