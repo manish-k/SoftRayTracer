@@ -16,7 +16,7 @@ struct Vec3
     inline Vec3<T> operator+(const Vec3<T>& v) const { return Vec3<T>(x + v.x, y + v.y, z + v.z); }
     inline Vec3<T> operator-(const Vec3<T>& v) const { return Vec3<T>(x - v.x, y - v.y, z - v.z); }
     inline Vec3<T> operator*(float c) const { return Vec3<T>(c * x, c * y, c * z); }
-    inline Vec3<T> operator/=(float c) const { return Vec3<T>(x / c, y / c, z / c); }
+    inline Vec3<T> operator/(float c) const { return Vec3<T>(x / c, y / c, z / c); }
     // dot product
     inline T operator*(const Vec3<T>& vec) const { return x * vec.x + y * vec.y + z * vec.z; }
     // cross product
@@ -27,8 +27,8 @@ struct Vec3
             z * vec.x - x * vec.z,
             x * vec.y - y * vec.x);
     }
-    inline float magnitude() { return std::sqrt(x * x + y * y + z * z); }
-    inline float squared_magnitude() { return x * x + y * y + z * z; }
+    inline float magnitude() const { return std::sqrt(x * x + y * y + z * z); }
+    inline float squared_magnitude() const { return x * x + y * y + z * z; }
     inline void  normaliize()
     {
         float m = magnitude();
@@ -36,13 +36,18 @@ struct Vec3
         y       = y / m;
         z       = z / m;
     }
+    inline Vec3<T> unit_vector() const
+    {
+        float m = magnitude();
+        return Vec3<T>(x / m, y / m, z / m);
+    }
 
     template <typename>
     friend std::ostream& operator<<(std::ostream& out, const Vec3<T>& v);
 };
 
-typedef Vec3<int>   Vec3i;
-typedef Vec3<float> Vec3f;
+typedef Vec3<int> Vec3i;
+using Vec3f = Vec3<float>;
 
 template <typename T>
 inline std::ostream& operator<<(std::ostream& out, const Vec3<T>& v)
@@ -54,7 +59,7 @@ inline std::ostream& operator<<(std::ostream& out, const Vec3<T>& v)
 template <typename T>
 inline Vec3<T> operator*(float c, const Vec3<T>& v)
 {
-    return Vec3<T>(c * x, c * y, c * z);
+    return Vec3<T>(c * v.x, c * v.y, c * v.z);
 }
 
 template <typename T>
@@ -71,18 +76,23 @@ struct Vec2
     inline Vec2<T> operator-(const Vec2<T>& v) const { return Vec2<T>(x - v.x, y - v.y); }
     // scaler product
     inline Vec2<T> operator*(float c) const { return Vec2<T>(c * x, c * y); }
-    inline Vec2<T> operator/=(float c) const { return Vec2<T>(x / c, y / c); }
+    inline Vec2<T> operator/(float c) const { return Vec2<T>(x / c, y / c); }
     // dot product
     inline T operator*(const Vec2<T>& vec) const { return x * vec.x + y * vec.y; }
     // cross product
     inline Vec3<T> operator^(const Vec2<T>& vec) const { return Vec3<T>(0, 0, x * vec.y - y * vec.x); }
-    inline float   magnitude() { return std::sqrt(x * x + y * y); }
-    inline float   squared_magnitude() { return x * x + y * y; }
+    inline float   magnitude() const { return std::sqrt(x * x + y * y); }
+    inline float   squared_magnitude() const { return x * x + y * y; }
     inline void    normaliize()
     {
         float m = magnitude();
         x       = x / m;
         y       = y / m;
+    }
+    inline Vec2<T> unit_vector() const
+    {
+        float m = magnitude();
+        return Vec2<T>(x / m, y / m);
     }
 
     template <typename>
@@ -102,7 +112,7 @@ inline std::ostream& operator<<(std::ostream& out, const Vec2<T>& v)
 template <typename T>
 inline Vec2<T> operator*(float c, const Vec2<T>& v)
 {
-    return Vec2<T>(c * x, c * y);
+    return Vec2<T>(c * v.x, c * v.y);
 }
 
 template <typename T>
@@ -120,11 +130,11 @@ struct Vec4
     inline Vec4<T> operator+(const Vec4<T>& v) const { return Vec4<T>(x + v.x, y + v.y, z + v.z, w + v.w); }
     inline Vec4<T> operator-(const Vec4<T>& v) const { return Vec4<T>(x - v.x, y - v.y, z - v.z, w - v.w); }
     inline Vec4<T> operator*(float c) const { return Vec4<T>(c * x, c * y, c * z, c * w); }
-    inline Vec4<T> operator/=(float c) const { return Vec4<T>(x / c, y / c, z / c, w / c); }
+    inline Vec4<T> operator/(float c) const { return Vec4<T>(x / c, y / c, z / c, w / c); }
     // dot product
     inline T     operator*(const Vec3<T>& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
-    inline float magnitude() { return std::sqrt(x * x + y * y + z * z + w * w); }
-    inline float squared_magnitude() { return x * x + y * y + z * z + w * w; }
+    inline float magnitude() const { return std::sqrt(x * x + y * y + z * z + w * w); }
+    inline float squared_magnitude() const { return x * x + y * y + z * z + w * w; }
     inline void  normaliize()
     {
         float m = magnitude();
@@ -132,6 +142,11 @@ struct Vec4
         y       = y / m;
         z       = z / m;
         w       = w / m;
+    }
+    inline Vec4<T> unit_vector() const
+    {
+        float m = magnitude();
+        return Vec4<T>(x / m, y / m, z / m, w / m);
     }
 
     template <typename>
@@ -151,5 +166,5 @@ std::ostream& operator<<(std::ostream& out, const Vec4<T>& v)
 template <typename T>
 inline Vec4<T> operator*(float c, const Vec4<T>& v)
 {
-    return Vec4<T>(c * x, c * y, c * z, c * w);
+    return Vec4<T>(c * v.x, c * v.y, c * v.z, c * v.w);
 }

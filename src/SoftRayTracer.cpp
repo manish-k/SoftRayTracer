@@ -1,33 +1,25 @@
 ﻿#include "SoftRayTracer.h"
 
 #include "utils/log.h"
+#include "geometry/vector.h"
+#include "camera.h"
 
 int main()
 {
     init_logger();
 
-    Image img;
+    Image  img;
 
-    int   width  = 256;
-    int   height = 256;
-    bool  status = create_image(&img, width, height, 3);
+    int    width        = 1280;
+    int    height       = 720;
+    float  aspect_ratio = float(width) / height;
+    bool   status       = create_image(&img, width, height, 3);
 
-    if (status)
-    {
-        for (int j = 0; j < width; ++j)
-        {
-            for (int i = 0; i < height; ++i)
-            {
-                float r = float(i) / (width - 1);
-                float g = float(j) / (height - 1);
-                float b = 0.0f;
+    Camera cam(Vec3f(), aspect_ratio, width);
 
-                set_image_pixel_color(&img, i, j, r, g, b);
-            }
-        }
+    cam.render(&img);
 
-        write_image(&img, "test_out.tga");
-    }
+    write_image(&img, "test_out.tga");
 
     free_image(&img);
 

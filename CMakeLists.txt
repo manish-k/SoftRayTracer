@@ -32,8 +32,10 @@ set(SRC_FILES
 	# Header files
 	"${SRC_DIR}/image.h"
 	"${SRC_DIR}/color.h"
+	"${SRC_DIR}/camera.h"
 	# Source files
 	"${SRC_DIR}/image.cpp"
+	"${SRC_DIR}/camera.cpp"
 )
 
 set(MAIN_FILES
