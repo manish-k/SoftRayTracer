@@ -1,9 +1,10 @@
 #include "camera.h"
 #include "color.h"
+#include "utils/log.h"
 
 Camera::Camera(Vec3f position, float aspect_ratio, int width)
 {
-    m_position     = position;
+    m_position = position;
     update(aspect_ratio, width);
 }
 
@@ -28,7 +29,7 @@ void Camera::update(float aspect_ratio, int width)
     m_vp_origin = m_position - Vec3f(0.f, 0.f, focal_length) - m_vp_axis_v / 2 - m_vp_axis_u / 2;
 }
 
-void Camera::render(Image* img)
+void Camera::render(Image* img, Traceable& object)
 {
     Vec3f vp_start_pixel = m_vp_origin + 0.5 * (m_vp_pixel_step_u + m_vp_pixel_step_v);
 
@@ -42,9 +43,21 @@ void Camera::render(Image* img)
             Vec3f ray_direction = pixel_center - m_position;
             Ray   r(m_position, ray_direction);
 
-            // get color
-            Color c = get_bg_color(r);
-            
+            Color c;
+
+            auto  intersect_info = object.intersect(r, 0, 1000);
+            if (intersect_info.has_value())
+            {
+                Vec3f normal = (*intersect_info).normal;
+                Vec3f clamp  = 0.5 * (normal + Vec3f(1.f, 1.f, 1.f));
+
+                c = Color(clamp.x, clamp.y, clamp.z);
+            }
+            else
+            {
+                c = get_bg_color(r);
+            }
+
             // set color in img
             set_image_pixel_color(img, i, j, c);
         }
@@ -59,4 +72,3 @@ Color Camera::get_bg_color(const Ray& r)
 
     return (1.f - y_clamp) * Color(1.f, 1.f, 1.f) + y_clamp * Color(0.5f, 0.7f, 1.f);
 }
-

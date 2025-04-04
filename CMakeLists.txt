@@ -18,6 +18,8 @@ set(GEOMETRY_FILES
 	# Header files
 	"${GEOMETRY_DIR}/vector.h"
 	"${GEOMETRY_DIR}/ray.h"
+	"${GEOMETRY_DIR}/traceable.h"
+	"${GEOMETRY_DIR}/sphere.h"
 )
 
 set(UTILS_DIR "${SRC_DIR}/utils")

@@ -2,6 +2,7 @@
 
 #include "utils/log.h"
 #include "geometry/vector.h"
+#include "geometry/sphere.h"
 #include "camera.h"
 
 int main()
@@ -17,7 +18,9 @@ int main()
 
     Camera cam(Vec3f(), aspect_ratio, width);
 
-    cam.render(&img);
+    Sphere s(Vec3f(0.f, 0.f, -3.f), 1.f);
+
+    cam.render(&img, s);
 
     write_image(&img, "test_out.tga");
 

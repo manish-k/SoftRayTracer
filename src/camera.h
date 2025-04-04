@@ -3,6 +3,7 @@
 #include "image.h"
 #include "geometry/vector.h"
 #include "geometry/ray.h"
+#include "geometry/traceable.h"
 
 class Camera
 {
@@ -11,7 +12,7 @@ public:
     ~Camera() = default;
 
     void update(float aspect_ratio, int width);
-    void render(Image* img);
+    void render(Image* img, Traceable& object);
 
 private:
     Color get_bg_color(const Ray& r);
