@@ -9,6 +9,7 @@ struct IntersectInfo
 {
     Vec3f point;
     Vec3f normal;
+    float t;
     bool  front_face;
 };
 

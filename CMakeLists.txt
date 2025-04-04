@@ -10,7 +10,10 @@ find_program(CLANG_FORMAT_EXE NAMES "clang-format" DOC "Path to clang-format exe
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 
 set(MATH_DIR "${SRC_DIR}/math")
-set(MATH_FILES 
+set(MATH_FILES
+	# Header files
+	#"${MATH_DIR}/math.h"
+	#"${MATH_DIR}/interval.h"
 )
 
 set(GEOMETRY_DIR "${SRC_DIR}/geometry")
@@ -35,6 +38,7 @@ set(SRC_FILES
 	"${SRC_DIR}/image.h"
 	"${SRC_DIR}/color.h"
 	"${SRC_DIR}/camera.h"
+	"${SRC_DIR}/world.h"
 	# Source files
 	"${SRC_DIR}/image.cpp"
 	"${SRC_DIR}/camera.cpp"

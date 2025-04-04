@@ -5,6 +5,8 @@
 #include "geometry/sphere.h"
 #include "camera.h"
 
+#include <memory>
+
 int main()
 {
     init_logger();
@@ -20,7 +22,11 @@ int main()
 
     Sphere s(Vec3f(0.f, 0.f, -3.f), 1.f);
 
-    cam.render(&img, s);
+    World  world;
+    world.add(std::make_shared<Sphere>(Vec3f(0.f, 0.f, -2.f), 0.5f));
+    world.add(std::make_shared<Sphere>(Vec3f(0.f, -100.5f, -2.f), 100.f));
+
+    cam.render(&img, world);
 
     write_image(&img, "test_out.tga");
 

@@ -1,6 +1,9 @@
 #include "camera.h"
 #include "color.h"
 #include "utils/log.h"
+//#include "math/math.h"
+
+#include <limits>
 
 Camera::Camera(Vec3f position, float aspect_ratio, int width)
 {
@@ -29,7 +32,7 @@ void Camera::update(float aspect_ratio, int width)
     m_vp_origin = m_position - Vec3f(0.f, 0.f, focal_length) - m_vp_axis_v / 2 - m_vp_axis_u / 2;
 }
 
-void Camera::render(Image* img, Traceable& object)
+void Camera::render(Image* img, World& world)
 {
     Vec3f vp_start_pixel = m_vp_origin + 0.5 * (m_vp_pixel_step_u + m_vp_pixel_step_v);
 
@@ -45,7 +48,7 @@ void Camera::render(Image* img, Traceable& object)
 
             Color c;
 
-            auto  intersect_info = object.intersect(r, 0, 1000);
+            auto  intersect_info = world.intersect(r, 0, std::numeric_limits<float>::infinity());
             if (intersect_info.has_value())
             {
                 Vec3f normal = (*intersect_info).normal;
