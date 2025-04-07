@@ -4,6 +4,7 @@
 #include "geometry/vector.h"
 #include "geometry/ray.h"
 #include "world.h"
+#include "math/tmath.h"
 
 class Camera
 {
@@ -24,9 +25,12 @@ private:
     Vec3f m_position     = Vec3f {};
 
     // viewport
-    Vec3f m_vp_origin       = Vec3f {};
-    Vec3f m_vp_axis_u       = Vec3f {};
-    Vec3f m_vp_axis_v       = Vec3f {};
-    Vec3f m_vp_pixel_step_u = Vec3f {};
-    Vec3f m_vp_pixel_step_v = Vec3f {};
+    Vec3f    m_vp_origin       = Vec3f {};
+    Vec3f    m_vp_axis_u       = Vec3f {};
+    Vec3f    m_vp_axis_v       = Vec3f {};
+    Vec3f    m_vp_pixel_step_u = Vec3f {};
+    Vec3f    m_vp_pixel_step_v = Vec3f {};
+
+    uint32_t m_seed                 = get_static_seed();
+    uint32_t m_aa_samples_per_pixel = 100;
 };

@@ -1,5 +1,6 @@
 #include "image.h"
 #include "utils/assert.h"
+#include "utils/utils.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -50,9 +51,9 @@ void set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, f
 
     unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
 
-    *pixel       = int(255.999 * r); // red
-    *(pixel + 1) = int(255.999 * g); // green
-    *(pixel + 2) = int(255.999 * b); // green
+    *pixel       = int(256 * clamp(r, 0.f, .999f)); // red
+    *(pixel + 1) = int(256 * clamp(g, 0.f, .999f)); // green
+    *(pixel + 2) = int(256 * clamp(b, 0.f, .999f)); // green
 }
 
 void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color)
@@ -61,9 +62,9 @@ void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color)
 
     unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
 
-    *pixel       = int(255.999 * color.r); // red
-    *(pixel + 1) = int(255.999 * color.g); // green
-    *(pixel + 2) = int(255.999 * color.b); // green
+    *pixel       = int(256 * clamp(color.r, 0.f, .999f)); // red
+    *(pixel + 1) = int(256 * clamp(color.g, 0.f, .999f)); // green
+    *(pixel + 2) = int(256 * clamp(color.b, 0.f, .999f)); // green
 }
 
 Color get_image_pixel_color(Image* img, int x_pos, int y_pos)

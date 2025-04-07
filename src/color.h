@@ -20,6 +20,7 @@ struct Color
     inline Color operator-(const Color& c) const { return Color(r - c.r, g - c.g, b - c.b); }
     inline Color operator*(float c) const { return Color(c * r, c * g, c * b); }
     inline Color operator*(const Color& c) const { return Color(r * c.r, g * c.g, b * c.b); }
+    inline Color operator/(float c) const { return Color(r / c, g / c, b / c); }
 
     // print color
     friend std::ostream& operator<<(std::ostream& out, const Color& c);

@@ -12,7 +12,7 @@ set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(MATH_DIR "${SRC_DIR}/math")
 set(MATH_FILES
 	# Header files
-	#"${MATH_DIR}/math.h"
+	"${MATH_DIR}/tmath.h"
 	#"${MATH_DIR}/interval.h"
 )
 
@@ -30,6 +30,7 @@ set(UTILS_FILES
 	# Header files
 	"${UTILS_DIR}/log.h"
 	"${UTILS_DIR}/assert.h"
+	"${UTILS_DIR}/utils.h"
 	# Source files
 )
 

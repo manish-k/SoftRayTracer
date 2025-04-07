@@ -10,6 +10,8 @@ struct Ray
 
     Ray(const Vec3f& origin, const Vec3f& direction) :
         origin(origin), direction(direction) {};
+    Ray() :
+        origin(Vec3f {}), direction(Vec3f {}) {};
 
     Vec3f at(float t) const
     {

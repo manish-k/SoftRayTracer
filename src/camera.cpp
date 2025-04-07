@@ -1,9 +1,7 @@
 #include "camera.h"
 #include "color.h"
 #include "utils/log.h"
-//#include "math/math.h"
-
-#include <limits>
+#include "math/tmath.h"
 
 Camera::Camera(Vec3f position, float aspect_ratio, int width)
 {
@@ -18,7 +16,6 @@ void Camera::update(float aspect_ratio, int width)
 
     m_image_height = (m_image_height < 1) ? 1 : m_image_height;
 
-    // TODO: replace focal length calculations with fov angle
     float focal_length = 2.0f;
     float vp_height    = 2.0f;
     float vp_width     = vp_height * float(m_image_width) / m_image_height;
@@ -36,33 +33,43 @@ void Camera::render(Image* img, World& world)
 {
     Vec3f vp_start_pixel = m_vp_origin + 0.5 * (m_vp_pixel_step_u + m_vp_pixel_step_v);
 
+    float sampling_frequency = 1.f / m_aa_samples_per_pixel;
+
     for (int j = 0; j < m_image_height; ++j)
     {
         for (int i = 0; i < m_image_width; ++i)
         {
-            Vec3f pixel_center = vp_start_pixel + i * m_vp_pixel_step_u + j * m_vp_pixel_step_v;
+            Color sampled_color;
+            Vec2f offsets;
 
-            // create ray
-            Vec3f ray_direction = pixel_center - m_position;
-            Ray   r(m_position, ray_direction);
-
-            Color c;
-
-            auto  intersect_info = world.intersect(r, 0, std::numeric_limits<float>::infinity());
-            if (intersect_info.has_value())
+            for (int sample = 0; sample < m_aa_samples_per_pixel; ++sample)
             {
-                Vec3f normal = (*intersect_info).normal;
-                Vec3f clamp  = 0.5 * (normal + Vec3f(1.f, 1.f, 1.f));
+                Vec3f pixel_sample = vp_start_pixel + (i + offsets.x) * m_vp_pixel_step_u + (j + offsets.y) * m_vp_pixel_step_v;
 
-                c = Color(clamp.x, clamp.y, clamp.z);
-            }
-            else
-            {
-                c = get_bg_color(r);
+                Vec3f ray_direction = pixel_sample - m_position;
+                // create ray
+                Ray  sampled_ray(m_position, ray_direction);
+
+                auto intersect_info = world.intersect(sampled_ray, 0, Inf);
+                if (intersect_info.has_value())
+                {
+                    Vec3f normal = (*intersect_info).normal;
+                    Vec3f clamp  = 0.5 * (normal + Vec3f(1.f, 1.f, 1.f));
+
+                    sampled_color = sampled_color + Color(clamp.x, clamp.y, clamp.z);
+                }
+                else
+                {
+                    sampled_color = sampled_color + get_bg_color(sampled_ray);
+                }
+
+                // for 1st sample use the 0,0 offset, useful if sample size is only 1
+                // i.e. no anti-aliasing
+                offsets = Vec2f(rand_float(m_seed) - 0.5, rand_float(m_seed) - 0.5);
             }
 
             // set color in img
-            set_image_pixel_color(img, i, j, c);
+            set_image_pixel_color(img, i, j, sampled_color * sampling_frequency);
         }
     }
 }
