@@ -50,18 +50,20 @@ void Camera::render(Image* img, World& world)
                 // create ray
                 Ray  sampled_ray(m_position, ray_direction);
 
-                auto intersect_info = world.intersect(sampled_ray, 0, Inf);
-                if (intersect_info.has_value())
-                {
-                    Vec3f normal = (*intersect_info).normal;
-                    Vec3f clamp  = 0.5 * (normal + Vec3f(1.f, 1.f, 1.f));
+                //auto intersect_info = world.intersect(sampled_ray, 0, Inf);
+                //if (intersect_info.has_value())
+                //{
+                //    Vec3f normal = (*intersect_info).normal;
+                //    Vec3f clamp  = 0.5 * (normal + Vec3f(1.f, 1.f, 1.f));
 
-                    sampled_color = sampled_color + Color(clamp.x, clamp.y, clamp.z);
-                }
-                else
-                {
-                    sampled_color = sampled_color + get_bg_color(sampled_ray);
-                }
+                //    sampled_color = sampled_color + Color(clamp.x, clamp.y, clamp.z);
+                //}
+                //else
+                //{
+                //    sampled_color = sampled_color + get_bg_color(sampled_ray);
+                //}
+
+                 sampled_color = sampled_color + get_ray_color(sampled_ray, world, m_max_ray_bounces);
 
                 // for 1st sample use the 0,0 offset, useful if sample size is only 1
                 // i.e. no anti-aliasing
@@ -81,4 +83,20 @@ Color Camera::get_bg_color(const Ray& r)
     float y_clamp = 0.5 * (dir.y + 1.0f); // between 0 to 1
 
     return (1.f - y_clamp) * Color(1.f, 1.f, 1.f) + y_clamp * Color(0.5f, 0.7f, 1.f);
+}
+
+Color Camera::get_ray_color(const Ray& r, World& world, uint32_t max_bounces)
+{
+    if (max_bounces <= 0)
+        return Color(0.f, 0.f, 0.f);
+
+    auto intersect_info = world.intersect(r, 0.001, Inf);
+    if (intersect_info.has_value())
+    {
+        Vec3f new_direction = (*intersect_info).normal + rand_unit_vector(m_seed);
+        Vec3f ray_start     = (*intersect_info).point;
+        return 0.5 * get_ray_color(Ray(ray_start, new_direction), world, max_bounces - 1);
+    }
+
+    return get_bg_color(r);
 }

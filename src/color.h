@@ -24,6 +24,17 @@ struct Color
 
     // print color
     friend std::ostream& operator<<(std::ostream& out, const Color& c);
+
+    Color                to_gamma() const
+    {
+        float new_r { 0.f }, new_g { 0.f }, new_b { 0.f };
+
+        if (r > 0) new_r = std::sqrt(r);
+        if (g > 0) new_g = std::sqrt(g);
+        if (b > 0) new_b = std::sqrt(b);
+
+        return Color(new_r, new_g, new_b);
+    }
 };
 
 inline std::ostream& operator<<(std::ostream& out, const Color& c)

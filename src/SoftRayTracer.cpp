@@ -24,6 +24,7 @@ int main()
 
     World  world;
     world.add(std::make_shared<Sphere>(Vec3f(0.f, 0.f, -2.f), 0.5f));
+    world.add(std::make_shared<Sphere>(Vec3f(-1.f, 0.f, -2.f), 0.3f));
     world.add(std::make_shared<Sphere>(Vec3f(0.f, -100.5f, -2.f), 100.f));
 
     cam.render(&img, world);

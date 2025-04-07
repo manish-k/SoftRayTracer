@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geometry/vector.h"
+
 #include <chrono>
 #include <limits>
 
@@ -38,8 +40,31 @@ inline uint32_t pcg_hash(uint32_t input)
     return (word >> 22u) ^ word;
 }
 
+// generate random float in [0, 1)
 inline float rand_float(uint32_t& seed)
 {
     seed = pcg_hash(seed);
     return (float)seed / (float)UINT32_MAX;
+}
+
+inline float rand_float(uint32_t& seed, int min, int max)
+{
+    return min + (max - min) * rand_float(seed);
+}
+
+inline Vec3f rand_vector(uint32_t& seed)
+{
+    return Vec3f(rand_float(seed, -1, 1), rand_float(seed, -1, 1), rand_float(seed, -1, 1));
+}
+
+inline Vec3f rand_unit_vector(uint32_t& seed)
+{
+    Vec3f vec = rand_vector(seed);
+
+    if (vec.squared_magnitude() - std::numeric_limits<float>::epsilon() <= 0.0f)
+    {
+        vec = rand_vector(seed);
+    }
+
+    return vec.normaliize();
 }

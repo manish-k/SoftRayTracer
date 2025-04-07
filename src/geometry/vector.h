@@ -29,12 +29,14 @@ struct Vec3
     }
     inline float magnitude() const { return std::sqrt(x * x + y * y + z * z); }
     inline float squared_magnitude() const { return x * x + y * y + z * z; }
-    inline void  normaliize()
+    inline Vec3<T>&  normaliize()
     {
         float m = magnitude();
         x       = x / m;
         y       = y / m;
         z       = z / m;
+
+        return *this;
     }
     inline Vec3<T> unit_vector() const
     {
@@ -80,14 +82,16 @@ struct Vec2
     // dot product
     inline T operator*(const Vec2<T>& vec) const { return x * vec.x + y * vec.y; }
     // cross product
-    inline Vec3<T> operator^(const Vec2<T>& vec) const { return Vec3<T>(0, 0, x * vec.y - y * vec.x); }
+    inline Vec2<T> operator^(const Vec2<T>& vec) const { return Vec3<T>(0, 0, x * vec.y - y * vec.x); }
     inline float   magnitude() const { return std::sqrt(x * x + y * y); }
     inline float   squared_magnitude() const { return x * x + y * y; }
-    inline void    normaliize()
+    inline Vec2<T>    normaliize()
     {
         float m = magnitude();
         x       = x / m;
         y       = y / m;
+
+        return *this;
     }
     inline Vec2<T> unit_vector() const
     {
@@ -135,13 +139,15 @@ struct Vec4
     inline T     operator*(const Vec3<T>& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
     inline float magnitude() const { return std::sqrt(x * x + y * y + z * z + w * w); }
     inline float squared_magnitude() const { return x * x + y * y + z * z + w * w; }
-    inline void  normaliize()
+    inline Vec4<T>  normaliize()
     {
         float m = magnitude();
         x       = x / m;
         y       = y / m;
         z       = z / m;
         w       = w / m;
+
+        return *this;
     }
     inline Vec4<T> unit_vector() const
     {

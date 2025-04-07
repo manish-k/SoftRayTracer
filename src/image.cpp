@@ -45,26 +45,17 @@ bool create_image(Image* img, int width, int height, int channels)
     return false;
 }
 
-void set_image_pixel_color(Image* img, int x_pos, int y_pos, float r, float g, float b)
-{
-    ASSERT(img->channels >= 3, "need atleas 3 channels for r,g and b");
-
-    unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
-
-    *pixel       = int(256 * clamp(r, 0.f, .999f)); // red
-    *(pixel + 1) = int(256 * clamp(g, 0.f, .999f)); // green
-    *(pixel + 2) = int(256 * clamp(b, 0.f, .999f)); // green
-}
-
 void set_image_pixel_color(Image* img, int x_pos, int y_pos, const Color& color)
 {
     ASSERT(img->channels >= 3, "need atleas 3 channels for r,g and b");
 
+    Color          gamma_corrected_color = color.to_gamma();
+
     unsigned char* pixel = img->data + (y_pos * img->width + x_pos) * img->channels;
 
-    *pixel       = int(256 * clamp(color.r, 0.f, .999f)); // red
-    *(pixel + 1) = int(256 * clamp(color.g, 0.f, .999f)); // green
-    *(pixel + 2) = int(256 * clamp(color.b, 0.f, .999f)); // green
+    *pixel       = int(256 * clamp(gamma_corrected_color.r, 0.f, .999f)); // red
+    *(pixel + 1) = int(256 * clamp(gamma_corrected_color.g, 0.f, .999f)); // green
+    *(pixel + 2) = int(256 * clamp(gamma_corrected_color.b, 0.f, .999f)); // green
 }
 
 Color get_image_pixel_color(Image* img, int x_pos, int y_pos)

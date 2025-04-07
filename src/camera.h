@@ -17,6 +17,7 @@ public:
 
 private:
     Color get_bg_color(const Ray& r);
+    Color get_ray_color(const Ray& r, World& world, uint32_t max_bounces);
 
 private:
     int   m_image_width  = 0;
@@ -33,4 +34,6 @@ private:
 
     uint32_t m_seed                 = get_static_seed();
     uint32_t m_aa_samples_per_pixel = 100;
+
+    uint32_t m_max_ray_bounces = 50;
 };
