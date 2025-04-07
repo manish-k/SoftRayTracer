@@ -29,7 +29,7 @@ set(UTILS_DIR "${SRC_DIR}/utils")
 set(UTILS_FILES
 	# Header files
 	"${UTILS_DIR}/log.h"
-	"${UTILS_DIR}/assert.h"
+	"${UTILS_DIR}/tassert.h"
 	"${UTILS_DIR}/utils.h"
 	# Source files
 )
@@ -40,6 +40,7 @@ set(SRC_FILES
 	"${SRC_DIR}/color.h"
 	"${SRC_DIR}/camera.h"
 	"${SRC_DIR}/world.h"
+	"${SRC_DIR}/material.h"
 	# Source files
 	"${SRC_DIR}/image.cpp"
 	"${SRC_DIR}/camera.cpp"
@@ -53,6 +54,7 @@ set(MAIN_FILES
 set(PROJECT_FILES
 	${MATH_FILES}
 	${GEOMETRY_FILES}
+	${UTILS_FILES}
 	${SRC_FILES}
 	${MAIN_FILES}
 )
@@ -63,6 +65,7 @@ add_executable (SoftRayTracer ${PROJECT_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC 
 	${MATH_DIR}
 	${GEOMETRY_DIR}
+	${UTILS_DIR}
 	${SRC_DIR}
 )
 

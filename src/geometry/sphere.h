@@ -3,12 +3,15 @@
 #include "vector.h"
 #include "traceable.h"
 #include "utils/log.h"
+#include "material.h"
+
+#include <memory>
 
 class Sphere : public Traceable
 {
 public:
-    Sphere(const Vec3f& center, float radius) :
-        m_center(center), m_radius(radius) {};
+    Sphere(const Vec3f& center, float radius, std::shared_ptr<Material> mat) :
+        m_center(center), m_radius(radius), m_material(mat) {};
 
     std::optional<IntersectInfo> intersect(
         const Ray& r, float ray_t_min, float ray_t_max) const override
@@ -50,11 +53,13 @@ public:
             intersection_point,
             out_normal,
             nearest_root_t,
-            front_face
+            front_face,
+            m_material
         };
     }
 
 private:
-    Vec3f m_center;
-    float m_radius;
+    Vec3f                     m_center {};
+    float                     m_radius {};
+    std::shared_ptr<Material> m_material = nullptr;
 };

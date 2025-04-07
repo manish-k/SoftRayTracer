@@ -4,6 +4,9 @@
 #include "ray.h"
 
 #include <optional>
+#include <memory>
+
+class Material;
 
 struct IntersectInfo
 {
@@ -11,6 +14,7 @@ struct IntersectInfo
     Vec3f normal;
     float t;
     bool  front_face;
+    std::shared_ptr<Material> material;
 };
 
 class Traceable

@@ -27,9 +27,9 @@ struct Vec3
             z * vec.x - x * vec.z,
             x * vec.y - y * vec.x);
     }
-    inline float magnitude() const { return std::sqrt(x * x + y * y + z * z); }
-    inline float squared_magnitude() const { return x * x + y * y + z * z; }
-    inline Vec3<T>&  normaliize()
+    inline float    magnitude() const { return std::sqrt(x * x + y * y + z * z); }
+    inline float    squared_magnitude() const { return x * x + y * y + z * z; }
+    inline Vec3<T>& normaliize()
     {
         float m = magnitude();
         x       = x / m;
@@ -42,6 +42,18 @@ struct Vec3
     {
         float m = magnitude();
         return Vec3<T>(x / m, y / m, z / m);
+    }
+
+    inline bool near_zero()
+    {
+        auto constexpr epsilon = std::numeric_limits<float>::epsilon();
+
+        if ((x - epsilon) <= 0 && (y - epsilon) <= 0 && (z - epsilon) <= 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     template <typename>
@@ -85,7 +97,7 @@ struct Vec2
     inline Vec2<T> operator^(const Vec2<T>& vec) const { return Vec3<T>(0, 0, x * vec.y - y * vec.x); }
     inline float   magnitude() const { return std::sqrt(x * x + y * y); }
     inline float   squared_magnitude() const { return x * x + y * y; }
-    inline Vec2<T>    normaliize()
+    inline Vec2<T> normaliize()
     {
         float m = magnitude();
         x       = x / m;
@@ -136,10 +148,10 @@ struct Vec4
     inline Vec4<T> operator*(float c) const { return Vec4<T>(c * x, c * y, c * z, c * w); }
     inline Vec4<T> operator/(float c) const { return Vec4<T>(x / c, y / c, z / c, w / c); }
     // dot product
-    inline T     operator*(const Vec3<T>& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
-    inline float magnitude() const { return std::sqrt(x * x + y * y + z * z + w * w); }
-    inline float squared_magnitude() const { return x * x + y * y + z * z + w * w; }
-    inline Vec4<T>  normaliize()
+    inline T       operator*(const Vec3<T>& vec) const { return x * vec.x + y * vec.y + z * vec.z + w * vec.w; }
+    inline float   magnitude() const { return std::sqrt(x * x + y * y + z * z + w * w); }
+    inline float   squared_magnitude() const { return x * x + y * y + z * z + w * w; }
+    inline Vec4<T> normaliize()
     {
         float m = magnitude();
         x       = x / m;
@@ -173,4 +185,10 @@ template <typename T>
 inline Vec4<T> operator*(float c, const Vec4<T>& v)
 {
     return Vec4<T>(c * v.x, c * v.y, c * v.z, c * v.w);
+}
+
+template <typename T>
+inline Vec3<T> reflect(const Vec3<T>& incoming, const Vec3<T>& normal)
+{
+    return incoming - 2 * (incoming * normal) * normal;
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "vector.h"
-#include "utils/assert.h"
+#include "utils/tassert.h"
 
 struct Ray
 {

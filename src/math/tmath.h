@@ -5,7 +5,7 @@
 #include <chrono>
 #include <limits>
 
-static constexpr float Inf = std::numeric_limits<double>::infinity();
+static constexpr float Inf = std::numeric_limits<float>::infinity();
 
 // src: https://iquilezles.org/articles/sfrand/
 inline float frand(int* seed)
@@ -19,12 +19,6 @@ inline float frand(int* seed)
     *seed = 0x00269ec3 + (*seed) * 0x000343fd;
     ires  = ((((unsigned int)*seed) >> 9) | 0x3f800000);
     return fres - 1.0f;
-}
-
-inline float time_now()
-{
-    auto time_since_epoch = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-    return static_cast<float>(time_since_epoch) / 1e9;
 }
 
 inline constexpr uint32_t get_static_seed()
