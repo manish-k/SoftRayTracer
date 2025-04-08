@@ -62,7 +62,7 @@ public:
         uint32_t             seed) const override
     {
         Vec3f reflected_direction = reflect(in_ray.direction, intersect_info.normal).normaliize();
-        reflected_direction = reflected_direction + (m_fuzz * rand_unit_vector(seed));
+        reflected_direction       = reflected_direction + (m_fuzz * rand_unit_vector(seed));
 
         return {
             m_albedo,
@@ -73,4 +73,56 @@ public:
 private:
     Color m_albedo {};
     float m_fuzz {};
+};
+
+class Dielectric : public Material
+{
+public:
+    Dielectric(float refraction_index) :
+        m_refractive_index(refraction_index) {};
+
+    ShadingInfo scatter(
+        const Ray&           in_ray,
+        const IntersectInfo& intersect_info,
+        uint32_t             seed) const override
+    {
+        float relative_ri = intersect_info.front_face ? (1.0f / m_refractive_index) : m_refractive_index;
+
+        Vec3f incident_unit_direction = in_ray.direction.unit_vector();
+
+        float cosine_incidence = std::fmin((-1.f * incident_unit_direction) * intersect_info.normal, 1.f);
+        float sine_incidence   = std::sqrt(1.f - cosine_incidence * cosine_incidence);
+
+        Vec3f scatterd_direction;
+        if (relative_ri * sine_incidence > 1.0f )
+        {
+            // reflection;
+            scatterd_direction = reflect(incident_unit_direction, intersect_info.normal);
+        }
+        else
+        {
+            scatterd_direction = refract(
+                incident_unit_direction,
+                intersect_info.normal,
+                relative_ri);
+            // refraction
+        }
+
+        return {
+            Color(1.f, 1.f, 1.f),
+            Ray { intersect_info.point, scatterd_direction }
+        };
+    }
+
+private:
+    static float reflectance(float cosine, float refraction_index)
+    {
+        // Use Schlick's approximation for reflectance.
+        auto r0 = (1 - refraction_index) / (1 + refraction_index);
+        r0      = r0 * r0;
+        return r0 + (1 - r0) * std::pow((1 - cosine), 5);
+    }
+
+private:
+    float m_refractive_index {}; // relative to incidence ray medium
 };

@@ -192,3 +192,15 @@ inline Vec3<T> reflect(const Vec3<T>& incoming, const Vec3<T>& normal)
 {
     return incoming - 2 * (incoming * normal) * normal;
 }
+
+template <typename T>
+inline Vec3<T> refract(const Vec3<T>& incoming, const Vec3<T>& normal, float relative_refractive_index)
+{
+    float   incidence_cosine = std::fmin((-1.f * incoming) * normal, 1.0f);
+    Vec3<T> outgoing_perp    = relative_refractive_index * (incoming + incidence_cosine * normal);
+    Vec3<T> outgoing_para    = -std::sqrt(std::fabs(1.0f - outgoing_perp.squared_magnitude())) * normal;
+
+    Vec3<T> outgoing = outgoing_perp + outgoing_para;
+
+    return outgoing;
+}
