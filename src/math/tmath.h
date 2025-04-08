@@ -8,7 +8,7 @@
 static constexpr float Inf = std::numeric_limits<float>::infinity();
 
 // src: https://iquilezles.org/articles/sfrand/
-inline float frand(int* seed)
+inline float frand(int& seed)
 {
     union
     {
@@ -16,8 +16,8 @@ inline float frand(int* seed)
         unsigned int ires;
     };
 
-    *seed = 0x00269ec3 + (*seed) * 0x000343fd;
-    ires  = ((((unsigned int)*seed) >> 9) | 0x3f800000);
+    seed = 0x00269ec3 + (seed) * 0x000343fd;
+    ires  = ((((unsigned int)seed) >> 9) | 0x3f800000);
     return fres - 1.0f;
 }
 
@@ -46,12 +46,39 @@ inline float rand_float(uint32_t& seed, int min, int max)
     return min + (max - min) * rand_float(seed);
 }
 
+inline float rand_float(int& seed)
+{
+    return frand(seed);
+}
+
+inline float rand_float(int& seed, int min, int max)
+{
+    return min + (max - min) * frand(seed);
+}
+
 inline Vec3f rand_vector(uint32_t& seed)
 {
     return Vec3f(rand_float(seed, -1, 1), rand_float(seed, -1, 1), rand_float(seed, -1, 1));
 }
 
+inline Vec3f rand_vector(int& seed)
+{
+    return Vec3f(rand_float(seed, -1, 1), rand_float(seed, -1, 1), rand_float(seed, -1, 1));
+}
+
 inline Vec3f rand_unit_vector(uint32_t& seed)
+{
+    Vec3f vec = rand_vector(seed);
+
+    if (vec.squared_magnitude() - std::numeric_limits<float>::epsilon() <= 0.0f)
+    {
+        vec = rand_vector(seed);
+    }
+
+    return vec.normaliize();
+}
+
+inline Vec3f rand_unit_vector(int& seed)
 {
     Vec3f vec = rand_vector(seed);
 
