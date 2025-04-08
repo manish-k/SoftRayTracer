@@ -15,8 +15,8 @@ int main()
 
     Image  img;
 
-    int    width        = 1280;
-    int    height       = 720;
+    int    width        = 640;
+    int    height       = 360;
     float  aspect_ratio = float(width) / height;
     bool   status       = create_image(&img, width, height, 3);
 
@@ -24,8 +24,8 @@ int main()
 
     auto   material_ground = std::make_shared<Lambertian>(Color(0.8f, 0.8f, 0.0f));
     auto   material_center = std::make_shared<Lambertian>(Color(0.1f, 0.2f, 0.5f));
-    auto   material_left   = std::make_shared<Metal>(Color(0.8f, 0.8f, 0.8f));
-    auto   material_right  = std::make_shared<Metal>(Color(0.8f, 0.6f, 0.2f));
+    auto   material_left   = std::make_shared<Metal>(Color(0.8f, 0.8f, 0.8f), 0.3f);
+    auto   material_right  = std::make_shared<Metal>(Color(0.8f, 0.6f, 0.2f), 0.1f);
 
     World  world;
     world.add(std::make_shared<Sphere>(Vec3f(0.f, 0.f, -2.2f), 0.5f, material_center));
