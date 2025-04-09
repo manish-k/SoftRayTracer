@@ -9,13 +9,16 @@
 class Camera
 {
 public:
-    Camera(Vec3f position, float aspect_ratio, int width);
+    Camera(Vec3f position, float aspect_ratio, float fov, int width);
     ~Camera() = default;
 
-    void update(float aspect_ratio, int width);
+    void update(float aspect_ratio, float fov);
+    void set_view_direction(Vec3f position, Vec3f look_at_dir, Vec3f up);
+    void set_view_target(Vec3f position, Vec3f target, Vec3f up);
     void render(Image* img, World& world);
 
 private:
+    void  update_vp_axes();
     Color get_bg_color(const Ray& r);
     Color get_ray_color(const Ray& r, World& world, uint32_t max_bounces);
 
@@ -24,11 +27,18 @@ private:
     int   m_image_height = 0;
     float m_aspect_ratio = 0.f;
     Vec3f m_position     = Vec3f {};
+    float m_focal_length = 2.0f;
+    float m_fov          = 90.f;
+
+    // camera's basis vectors
+    Vec3f m_u = Vec3f(1.f, 0.f, 0.f);
+    Vec3f m_v = Vec3f(0.f, 1.f, 0.f);
+    Vec3f m_w = Vec3f(0.f, 0.f, 1.f); // opposite of view direction bcos rhs
 
     // viewport
     Vec3f    m_vp_origin       = Vec3f {};
-    Vec3f    m_vp_axis_u       = Vec3f {};
-    Vec3f    m_vp_axis_v       = Vec3f {};
+    float    m_vp_width        = 0.f;
+    float    m_vp_height       = 0.f;
     Vec3f    m_vp_pixel_step_u = Vec3f {};
     Vec3f    m_vp_pixel_step_v = Vec3f {};
 

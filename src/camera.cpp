@@ -3,30 +3,43 @@
 #include "utils/log.h"
 #include "math/tmath.h"
 
-Camera::Camera(Vec3f position, float aspect_ratio, int width)
+Camera::Camera(Vec3f position, float aspect_ratio, float fov, int width)
 {
-    m_position = position;
+    m_position    = position;
+    m_fov         = fov;
+    m_image_width = width;
     update(aspect_ratio, width);
 }
 
-void Camera::update(float aspect_ratio, int width)
+void Camera::update(float aspect_ratio, float fov)
 {
-    m_image_width  = width;
-    m_image_height = int(width / aspect_ratio);
+    m_image_height = int(m_image_width / aspect_ratio);
 
     m_image_height = (m_image_height < 1) ? 1 : m_image_height;
 
-    float focal_length = 2.0f;
-    float vp_height    = 2.0f;
-    float vp_width     = vp_height * float(m_image_width) / m_image_height;
+    float fov_angle = to_radians(m_fov);
+    float h         = tan(fov_angle / 2.f);
 
-    m_vp_axis_u = Vec3f(vp_width, 0.f, 0.f);
-    m_vp_axis_v = Vec3f(0.f, vp_height, 0.f);
+    m_vp_height = 2.0f * h * m_focal_length;
+    m_vp_width  = m_vp_height * (float(m_image_width) / m_image_height);
 
-    m_vp_pixel_step_u = m_vp_axis_u / m_image_width;
-    m_vp_pixel_step_v = m_vp_axis_v / m_image_height;
+    update_vp_axes();
+}
 
-    m_vp_origin = m_position - Vec3f(0.f, 0.f, focal_length) - m_vp_axis_v / 2 - m_vp_axis_u / 2;
+void Camera::set_view_direction(Vec3f position, Vec3f look_at_dir, Vec3f up)
+{
+    m_position = position;
+
+    m_w = look_at_dir.unit_vector();
+    m_u = (up.unit_vector() ^ m_w).unit_vector();
+    m_v = m_w ^ m_u;
+
+    update_vp_axes();
+}
+
+void Camera::set_view_target(Vec3f position, Vec3f target, Vec3f up)
+{
+    set_view_direction(position, position - target, up);
 }
 
 void Camera::render(Image* img, World& world)
@@ -62,6 +75,17 @@ void Camera::render(Image* img, World& world)
             set_image_pixel_color(img, i, j, sampled_color * sampling_frequency);
         }
     }
+}
+
+void Camera::update_vp_axes()
+{
+    Vec3f vp_u = m_vp_width * m_u;
+    Vec3f vp_v = m_vp_height * m_v;
+
+    m_vp_pixel_step_u = vp_u / m_image_width;
+    m_vp_pixel_step_v = vp_v / m_image_height;
+
+    m_vp_origin = m_position - (m_focal_length * m_w) - vp_v / 2 - vp_u / 2;
 }
 
 Color Camera::get_bg_color(const Ray& r)

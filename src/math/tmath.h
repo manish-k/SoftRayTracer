@@ -6,6 +6,7 @@
 #include <limits>
 
 static constexpr float Inf = std::numeric_limits<float>::infinity();
+static constexpr float Pi  = 3.141592653589793f;
 
 // src: https://iquilezles.org/articles/sfrand/
 inline float frand(int& seed)
@@ -17,7 +18,7 @@ inline float frand(int& seed)
     };
 
     seed = 0x00269ec3 + (seed) * 0x000343fd;
-    ires  = ((((unsigned int)seed) >> 9) | 0x3f800000);
+    ires = ((((unsigned int)seed) >> 9) | 0x3f800000);
     return fres - 1.0f;
 }
 
@@ -88,4 +89,9 @@ inline Vec3f rand_unit_vector(int& seed)
     }
 
     return vec.normaliize();
+}
+
+inline float to_radians(float degrees)
+{
+    return degrees * Pi / 180.0f;
 }
