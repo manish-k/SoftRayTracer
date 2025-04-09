@@ -20,8 +20,10 @@ void Camera::update(float aspect_ratio, float fov)
     float fov_angle = to_radians(m_fov);
     float h         = tan(fov_angle / 2.f);
 
-    m_vp_height = 2.0f * h * m_focal_length;
+    m_vp_height = 2.0f * h * m_lens_focal_length;
     m_vp_width  = m_vp_height * (float(m_image_width) / m_image_height);
+
+    m_lens_radius = m_lens_focal_length * tan(to_radians(m_lens_fov / 2.f));
 
     update_vp_axes();
 }
@@ -59,7 +61,15 @@ void Camera::render(Image* img, World& world)
             {
                 Vec3f pixel_sample = vp_start_pixel + (i + offsets.x) * m_vp_pixel_step_u + (j + offsets.y) * m_vp_pixel_step_v;
 
-                Vec3f ray_direction = pixel_sample - m_position;
+                Vec3f ray_origin = m_position;
+                if (m_lens_fov > 0)
+                {
+                    Vec2f rand_lens_offset = rand_vec_in_unit_disk(m_seed);
+
+                    ray_origin = m_position + m_lens_u * rand_lens_offset.x + m_lens_v * rand_lens_offset.y;
+                }
+
+                Vec3f ray_direction = pixel_sample - ray_origin;
 
                 // create ray
                 Ray sampled_ray(m_position, ray_direction);
@@ -85,7 +95,10 @@ void Camera::update_vp_axes()
     m_vp_pixel_step_u = vp_u / m_image_width;
     m_vp_pixel_step_v = vp_v / m_image_height;
 
-    m_vp_origin = m_position - (m_focal_length * m_w) - vp_v / 2 - vp_u / 2;
+    m_vp_origin = m_position - (m_lens_focal_length * m_w) - vp_v / 2 - vp_u / 2;
+
+    m_lens_u = m_lens_radius * m_u;
+    m_lens_v = m_lens_radius * m_v;
 }
 
 Color Camera::get_bg_color(const Ray& r)

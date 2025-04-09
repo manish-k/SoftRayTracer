@@ -27,8 +27,13 @@ private:
     int   m_image_height = 0;
     float m_aspect_ratio = 0.f;
     Vec3f m_position     = Vec3f {};
-    float m_focal_length = 2.0f;
     float m_fov          = 90.f;
+
+    float m_lens_fov          = 0.6f;
+    float m_lens_focal_length = 3.4f;
+    float m_lens_radius       = 0.f;
+    Vec3f m_lens_u            = Vec3f(1.f, 0.f, 0.f);
+    Vec3f m_lens_v            = Vec3f(0.f, 1.f, 0.f);
 
     // camera's basis vectors
     Vec3f m_u = Vec3f(1.f, 0.f, 0.f);

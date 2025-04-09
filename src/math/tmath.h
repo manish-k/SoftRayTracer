@@ -62,6 +62,11 @@ inline Vec3f rand_vector(uint32_t& seed)
     return Vec3f(rand_float(seed, -1, 1), rand_float(seed, -1, 1), rand_float(seed, -1, 1));
 }
 
+inline Vec2f rand_vector2(uint32_t& seed)
+{
+    return Vec2f(rand_float(seed, -1, 1), rand_float(seed, -1, 1));
+}
+
 inline Vec3f rand_vector(int& seed)
 {
     return Vec3f(rand_float(seed, -1, 1), rand_float(seed, -1, 1), rand_float(seed, -1, 1));
@@ -77,6 +82,16 @@ inline Vec3f rand_unit_vector(uint32_t& seed)
     }
 
     return vec.normaliize();
+}
+
+inline Vec2f rand_vec_in_unit_disk(uint32_t& seed)
+{
+    while (true)
+    {
+        Vec2f vec = rand_vector2(seed);
+        if (vec.squared_magnitude() < 1.f)
+            return vec;
+    }
 }
 
 inline Vec3f rand_unit_vector(int& seed)
