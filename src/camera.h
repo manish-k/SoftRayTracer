@@ -29,8 +29,8 @@ private:
     Vec3f m_position     = Vec3f {};
     float m_fov          = 90.f;
 
-    float m_lens_fov          = 0.6f;
-    float m_lens_focal_length = 3.4f;
+    float m_lens_fov          = 0.f;
+    float m_lens_focal_length = 10.f;
     float m_lens_radius       = 0.f;
     Vec3f m_lens_u            = Vec3f(1.f, 0.f, 0.f);
     Vec3f m_lens_v            = Vec3f(0.f, 1.f, 0.f);
@@ -48,7 +48,7 @@ private:
     Vec3f    m_vp_pixel_step_v = Vec3f {};
 
     uint32_t m_seed                 = get_static_seed();
-    uint32_t m_aa_samples_per_pixel = 100;
+    uint32_t m_aa_samples_per_pixel = 500;
 
     uint32_t m_max_ray_bounces = 50;
 };

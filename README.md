@@ -4,4 +4,4 @@ CPU ray tracer
 
 ### Gallery
 
-![](docs/trace.tga)
+![](docs/trace.bmp)

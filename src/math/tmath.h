@@ -1,6 +1,7 @@
 #pragma once
 
 #include "geometry/vector.h"
+#include "color.h"
 
 #include <chrono>
 #include <limits>
@@ -43,6 +44,11 @@ inline float rand_float(uint32_t& seed)
 }
 
 inline float rand_float(uint32_t& seed, int min, int max)
+{
+    return min + (max - min) * rand_float(seed);
+}
+
+inline float rand_float(uint32_t& seed, float min, float max)
 {
     return min + (max - min) * rand_float(seed);
 }
@@ -109,4 +115,14 @@ inline Vec3f rand_unit_vector(int& seed)
 inline float to_radians(float degrees)
 {
     return degrees * Pi / 180.0f;
+}
+
+inline Color rand_color(uint32_t& seed)
+{
+    return Color { rand_float(seed), rand_float(seed), rand_float(seed) };
+}
+
+inline Color rand_color(uint32_t& seed, float min, float max)
+{
+    return Color { rand_float(seed, min, max), rand_float(seed, min, max), rand_float(seed, min, max) };
 }
